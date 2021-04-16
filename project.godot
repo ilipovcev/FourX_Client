@@ -1,0 +1,75 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Reference",
+"class": "Cell",
+"language": "GDScript",
+"path": "res://World/Cell.gd"
+}, {
+"base": "Cell",
+"class": "CellArmor",
+"language": "GDScript",
+"path": "res://World/Cells/CellArmor.gd"
+}, {
+"base": "Cell",
+"class": "CellDamage",
+"language": "GDScript",
+"path": "res://World/Cells/CellDamage.gd"
+}, {
+"base": "Cell",
+"class": "CellHealth",
+"language": "GDScript",
+"path": "res://World/Cells/CellHealth.gd"
+}, {
+"base": "Cell",
+"class": "CellWin",
+"language": "GDScript",
+"path": "res://World/Cells/CellWin.gd"
+}, {
+"base": "Reference",
+"class": "Map",
+"language": "GDScript",
+"path": "res://World/Map.gd"
+}, {
+"base": "Reference",
+"class": "Player",
+"language": "GDScript",
+"path": "res://World/Player.gd"
+}, {
+"base": "Reference",
+"class": "Road",
+"language": "GDScript",
+"path": "res://World/Road.gd"
+} ]
+_global_script_class_icons={
+"Cell": "",
+"CellArmor": "",
+"CellDamage": "",
+"CellHealth": "",
+"CellWin": "",
+"Map": "",
+"Player": "",
+"Road": ""
+}
+
+[application]
+
+config/name="Four X Client"
+run/main_scene="res://Game.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+Server="*res://Singletons/Server.gd"
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"
