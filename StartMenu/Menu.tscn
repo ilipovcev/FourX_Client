@@ -1,0 +1,72 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Texture/blue-with-vignette-marble-texture-background-with-copy-space_23-2148327728.jpg" type="Texture" id=1]
+[ext_resource path="res://StartMenu/Menu.gd" type="Script" id=3]
+
+[node name="Menu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -185.0
+margin_top = -315.5
+margin_right = 185.0
+margin_bottom = 315.5
+texture = ExtResource( 1 )
+patch_margin_left = 150
+patch_margin_top = 300
+patch_margin_right = 150
+patch_margin_bottom = 300
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="NinePatchRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="NinePatchRect/VBoxContainer"]
+margin_right = 370.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 0, 120 )
+
+[node name="MarginContainer2" type="MarginContainer" parent="NinePatchRect/VBoxContainer"]
+margin_top = 124.0
+margin_right = 370.0
+margin_bottom = 244.0
+rect_min_size = Vector2( 0, 120 )
+
+[node name="InputIP" type="LineEdit" parent="NinePatchRect/VBoxContainer"]
+margin_top = 248.0
+margin_right = 370.0
+margin_bottom = 272.0
+hint_tooltip = "Server address"
+text = "127.0.0.1"
+placeholder_text = "Server address"
+
+[node name="InputPort" type="LineEdit" parent="NinePatchRect/VBoxContainer"]
+margin_top = 276.0
+margin_right = 370.0
+margin_bottom = 300.0
+hint_tooltip = "Nickname"
+placeholder_text = "Nickname"
+
+[node name="JoinButton" type="Button" parent="NinePatchRect/VBoxContainer"]
+margin_top = 304.0
+margin_right = 370.0
+margin_bottom = 324.0
+size_flags_horizontal = 5
+size_flags_vertical = 5
+text = "Join Game"
+[connection signal="pressed" from="NinePatchRect/VBoxContainer/JoinButton" to="." method="_on_JoinButton_pressed"]
