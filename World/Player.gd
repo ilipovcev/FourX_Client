@@ -35,7 +35,7 @@ func GetHealth():
 	
 func SetOrigin(vec: Vector2):
 	Origin = vec;
-	print("Игрок", Nick, "передвинут на координаты ", vec);
+	print("Игрок ", Nick, " передвинут на координаты ", vec);
 	
 func GetOrigin():
 	return Origin;

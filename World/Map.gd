@@ -91,7 +91,6 @@ func GetRoad(index: int):
 func MovePlayer(index: int, rng: int):
 	return GetRoad(index).Move(GetPlayer(index), rng);
 
-
 func GetPlayer(index: int):
 	return Players[index];
 
