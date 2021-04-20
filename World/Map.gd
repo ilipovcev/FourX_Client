@@ -102,6 +102,9 @@ func ResetPlayer():
 	Players.clear();
 	Players.resize(Roads.size());
 
+func RemovePlayer(index: int):
+	Players.remove(index);
+
 
 func to_string():
 	return JSON.print(jMap);

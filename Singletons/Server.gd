@@ -21,6 +21,7 @@ func ConnectServer(ip, name):
 func _On_connection_succeeded():
 	print("Connection succeded");
 	rpc_id(1, "RegPlayer", name_player);
+	get_tree().change_scene("res://WaitingScreen.tscn");
 	print("Player registring...");
 
 
@@ -32,17 +33,29 @@ func GetPlayerById(PlId):
 	return players[pls_map[PlId]];
 
 
-remote func OnRegPlayer(name, id, hp, origin: Vector2, index):
-	var pl: Player = Player.new();
-	GameMap.SetPlayer(index, pl);
-	pl.SetName(name);
-	pl.SetId(id);
-	pl.SetHealth(hp);
-	pl.SetOrigin(origin);
-	print("Registred with name ", pl.GetName(), " (", pl.GetHealth(), " HP). Position: ", pl.GetOrigin().x, " ", pl.GetOrigin().y);
-	players.append(pl);
-	pls_map[pl.GetId()] = players.size()-1;
+remote func OnRegPlayer(name, id, hp, origin: Vector2):
+	print("Registred with name ", name, " id: ", id, " (", hp, " HP). Position: ",origin.x, " ", origin.y);
 
+remote func StartGame(players_state):
+	var pl: Player
+	for i in players_state:
+		pl = Player.new();
+		pl.SetName(i[0]);
+		pl.SetId(i[1]);
+		pl.SetHealth(i[3]);
+		GameMap.SetPlayer(i[4], pl);
+		pl = GameMap.GetPlayer(i[4]);
+		pl.SetOrigin(i[2]);
+		players.append(pl);
+		pls_map[pl.GetId()] = players.size()-1;
+	get_tree().change_scene("res://Game.tscn");
+	Roll();
+	Roll();
+	Roll();
+	Roll();
+	Roll();
+	Roll();
+	Roll();
 	Roll();
 	Roll();
 	Roll();
@@ -52,7 +65,6 @@ remote func OnMapLoaded(map: String):
 	if !GameMap.LoadFromJsonStr(map):
 		print('Cant load the map');
 		return;
-	get_tree().change_scene("res://Game.tscn");
 
 
 remote func is_turn(isTurn):
@@ -61,8 +73,8 @@ remote func is_turn(isTurn):
 
 func Roll():
 	if turn:
-		rpc_id(1, "IsRoll");
 		turn = false;
+		rpc_id(1, "IsRoll");
 
 
 remote func OnRoll(new_origin: Vector2, steps_number: int, index_player: int):
@@ -76,12 +88,42 @@ remote func OnRoll(new_origin: Vector2, steps_number: int, index_player: int):
 
 	
 remote func get_states(players_state: Array):
-	print(players_state);
+	print("States: ", players_state);
 	var pl: Player;
 	for i in players_state:
-		pl = GetPlayerById(i[1]);
-		pl.SetOrigin(i[2]);
-		pl.SetHealth(i[3]);
 		print(i[1]);
 		print(i[2]);
 		print(i[3]);
+		print(i[4]);
+		pl = GetPlayerById(i[1]);
+		pl.SetOrigin(i[2]);
+		pl.SetHealth(i[3]);
+
+
+remote func on_dead():
+	print("Dead..");
+	get_tree().change_scene("res://StartMenu/Menu.tscn");
+	get_tree().set_network_peer(null);
+
+
+remote func on_player_dead(id: int):
+	var pl: Player = GetPlayerById(id);
+	print("Player ", pl.GetName(), " is dead");
+	GameMap.RemovePlayer(players.find(pl));
+	players.erase(pl);
+
+
+remote func on_win():
+	print("Win..");
+
+
+remote func on_player_win(id: int):
+	var pl: Player = GetPlayerById(id);
+	print("Player ", pl.GetName(), " is winner!");
+	print("Stop game");
+
+
+remote func stop_game():
+	print("Stop game");
+	get_tree().change_scene("res://StartMenu/Menu.tscn");
+	get_tree().set_network_peer(null);
