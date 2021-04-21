@@ -30,8 +30,10 @@ func _On_connection_failed():
 
 
 func GetPlayerById(PlId):
+	for i in players:
+		pls_map[i.GetId()] = players.find(i);
+		print("id: ", i.GetId(), ". index: ", players.find(i));
 	return players[pls_map[PlId]];
-
 
 remote func OnRegPlayer(name, id, hp, origin: Vector2):
 	print("Registred with name ", name, " id: ", id, " (", hp, " HP). Position: ",origin.x, " ", origin.y);
@@ -49,16 +51,6 @@ remote func StartGame(players_state):
 		players.append(pl);
 		pls_map[pl.GetId()] = players.size()-1;
 	get_tree().change_scene("res://Game.tscn");
-	Roll();
-	Roll();
-	Roll();
-	Roll();
-	Roll();
-	Roll();
-	Roll();
-	Roll();
-	Roll();
-	Roll();
 
 
 remote func OnMapLoaded(map: String):
@@ -71,8 +63,11 @@ remote func is_turn(isTurn):
 	turn = isTurn;
 
 
+remote func on_roll():
+	Roll();	
+
 func Roll():
-	if turn:
+	if turn == true:
 		turn = false;
 		rpc_id(1, "IsRoll");
 
@@ -98,6 +93,7 @@ remote func get_states(players_state: Array):
 		pl = GetPlayerById(i[1]);
 		pl.SetOrigin(i[2]);
 		pl.SetHealth(i[3]);
+		print(pl.GetOrigin());
 
 
 remote func on_dead():
@@ -109,8 +105,12 @@ remote func on_dead():
 remote func on_player_dead(id: int):
 	var pl: Player = GetPlayerById(id);
 	print("Player ", pl.GetName(), " is dead");
+	pls_map.erase(pl.GetId());
 	GameMap.RemovePlayer(players.find(pl));
 	players.erase(pl);
+	for i in players:
+		pls_map[i.GetId()] = players.find(i);
+		print("id: ", i.GetId(), ". index: ", players.find(i));
 
 
 remote func on_win():
@@ -125,5 +125,6 @@ remote func on_player_win(id: int):
 
 remote func stop_game():
 	print("Stop game");
+	turn = false;
 	get_tree().change_scene("res://StartMenu/Menu.tscn");
 	get_tree().set_network_peer(null);
