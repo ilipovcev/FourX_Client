@@ -1,6 +1,6 @@
 class_name Player
 
-var Health: int = 10;
+var Health: int = 6;
 var Nick: String = "Unnamed";
 var Id: int;
 var Origin: Vector2;
